@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Assistant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 700px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 6px 18px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            color: #a78bfa;
+        }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #fff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            color: white;
+            border: none;
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.6);
+        }
+
+        .features {
+            display: flex;
+            gap: 20px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px;
+            width: 180px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card .icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .feature-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .feature-card p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 4px;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* Floating New Chat Button */
+        #floating-new-chat {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.5);
+            z-index: 999999;
+            display: none;
+            transition: all 0.3s;
+        }
+
+        #floating-new-chat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(124, 58, 237, 0.7);
+        }
+
+        #floating-new-chat.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <div class="badge">✦ Powered by Retell AI</div>
+        <h1>Your AI Assistant<br/>is Ready</h1>
+        <p class="subtitle">
+            Chat with our intelligent assistant instantly.<br/>
+            Click the bubble in the bottom-right corner to get started.
+        </p>
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+            <button class="cta-btn" onclick="document.querySelector('#retell-widget')?.dispatchEvent(new Event('open'))">
+                💬 Start Chatting
+            </button>
+            <button class="cta-btn" id="new-chat-btn" style="background: rgba(255,255,255,0.1); box-shadow: none; border: 1px solid rgba(255,255,255,0.2);">
+                🔄 New Chat
+            </button>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>Instant Replies</h3>
+                <p>Real-time AI responses</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🧠</div>
+                <h3>Smart Context</h3>
+                <p>Remembers your conversation</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔒</div>
+                <h3>Secure</h3>
+                <p>Private & encrypted</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>Built with Retell AI · Chat Widget Demo</footer>
+
+    <!-- Floating New Chat Button -->
+    <button id="floating-new-chat" onclick="resetChat()">🔄 New Chat</button>
+
+    <!-- Retell AI Chat Widget -->
+    <script
+        id="retell-widget"
+        src="https://dashboard.retellai.com/retell-widget.js"
+        type="module"
+        data-public-key="public_key_770d3092bdc8a6de86f6b"
+        data-agent-id="agent_aec92b74ff0011ebf3c29a6900"
+        data-agent-version="0"
+        data-title="AI Assistant"
+        data-bot-name="RetellBot"
+        data-color="#7c3aed"
+        data-show-ai-popup="true"
+        data-show-ai-popup-time="3"
+        data-auto-open="false"
+    ></script>
+
+    <script>
+        const WIDGET_CONFIG = {
+            'data-public-key': 'public_key_770d3092bdc8a6de86f6b',
+            'data-agent-id': 'agent_aec92b74ff0011ebf3c29a6900',
+            'data-agent-version': '0',
+            'data-title': 'AI Assistant',
+            'data-bot-name': 'RetellBot',
+            'data-color': '#7c3aed',
+            'data-show-ai-popup': 'false',
+            'data-auto-open': 'true'
+        };
+
+        function injectWidget(autoOpen = false) {
+            const script = document.createElement('script');
+            script.id = 'retell-widget';
+            script.src = 'https://dashboard.retellai.com/retell-widget.js';
+            script.type = 'module';
+            Object.entries(WIDGET_CONFIG).forEach(([k, v]) => script.setAttribute(k, v));
+            script.setAttribute('data-auto-open', autoOpen ? 'true' : 'false');
+            document.body.appendChild(script);
+        }
+
+        function resetChat() {
+            // Remove old widget and any injected shadow DOM elements
+            const old = document.getElementById('retell-widget');
+            if (old) old.remove();
+
+            // Remove any leftover widget host elements Retell injects
+            document.querySelectorAll('[id^="retell"], retell-widget, #retell-chat-widget').forEach(el => el.remove());
+
+            // Small delay to let DOM clean up, then re-inject
+            setTimeout(() => injectWidget(true), 100);
+        }
+
+        // Watch for the widget bubble to appear, then show the New Chat button
+        const observer = new MutationObserver(() => {
+            const widgetEl = document.querySelector('retell-widget, [id^="retell-chat"]');
+            const btn = document.getElementById('floating-new-chat');
+            if (widgetEl) {
+                btn.classList.add('show');
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        document.getElementById('new-chat-btn').addEventListener('click', resetChat);
+    </script>
+
+</body>
+</html>
